@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Новый клиент*</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="vue@2.6.12.js"></script>
+    <script src="vuelidate.min.js"></script>
+    <script src="validators.min.js"></script>
+</head>
+<body>
+<div id="app">
+
+    <form action="" class="styled-form">
+        <label><span>Фамилия*</span><input v-model="$v.lastName.$model" :class="status($v.lastName)"></label>
+        <label><span>Имя*</span><input v-model="$v.firstName.$model" :class="status($v.firstName)"></label>
+        <label><span>Отчество</span><input v-model="$v.middleName.$model" :class="status($v.middleName)"></label>
+        <label><span>Дата рождения*</span><input v-model="$v.dateOfBirth.$model" :class="status($v.dateOfBirth)"></label>
+        <label><span>Номер телефона*</span><input v-model="$v.phone.$model" :class="status($v.phone)"></label>
+        <label><span>Пол</span>
+            <select v-model="$v.sex.$model" :class="status($v.sex)">
+                <option value="1">Женский</option>
+                <option value="2">Мужской</option>
+            </select>
+        </label>
+        <label><span>Группа клиентов*</span><select v-model="$v.clientGroups.$model" :class="status($v.clientGroups)" multiple title="Удерживайте клавишу Ctrl чтобы выбрать несколько вариантов">
+            <option value="1">VIP</option>
+            <option value="2">Проблемные</option>
+            <option value="3">ОМС</option>
+        </select></label>
+        <label><span>Лечащий врач</span><select v-model="$v.doctor.$model" :class="status($v.doctor)">
+            <option value="1">Иванов</option>
+            <option value="2">Захаров</option>
+            <option value="3">Чернышева</option>
+        </select></label>
+        <label><span class="any-width">Не отправлять СМС</span><input v-model="$v.dontSendSMS.$model" :class="status($v.dontSendSMS)" type="checkbox"></label>
+        <fieldset>
+            <legend>Адрес</legend>
+        <label><span>Индекс</span><input v-model="$v.addressPostalCode.$model" :class="status($v.addressPostalCode)"></label>
+        <label><span>Страна</span><input v-model="$v.addressCountry.$model" :class="status($v.addressCountry)"></label>
+        <label><span>Область</span><input v-model="$v.addressRegion.$model" :class="status($v.addressRegion)"></label>
+        <label><span>Город*</span><input v-model="$v.addressCity.$model" :class="status($v.addressCity)"></label>
+        <label><span>Улица</span><input v-model="$v.addressStreet.$model" :class="status($v.addressStreet)"></label>
+        <label><span>Дом</span><input v-model="$v.addressBuilding.$model" :class="status($v.addressBuilding)"></label>
+            </fieldset>
+        <fieldset>
+            <legend>Паспорт</legend>
+        <label><span>Тип документа* </span><select>
+            <option value="1">Паспорт</option>
+            <option value="2">Свидетельство о рождении</option>
+            <option value="3">Вод. удостоверение</option>
+        </select></label>
+        <label><span>Серия</span><input v-model="$v.passportSeries.$model" :class="status($v.passportSeries)"></label>
+        <label><span>Номер</span><input v-model="$v.passportNumber.$model" :class="status($v.passportNumber)"></label>
+        <label><span>Кем выдан</span><textarea v-model="$v.passportGivenBy.$model" :class="status($v.passportGivenBy)"></textarea></label>
+        <label><span>Дата выдачи*</span><input v-model="$v.passportDateGiven.$model" :class="status($v.passportDateGiven)"></label>
+        </fieldset>
+    </form>
+
+            <pre class="debug">
+                {{ $v }}
+            </pre>
+</div>
+<script>
+	Vue.use(window.vuelidate.default)
+	const {required, minLength, integer} = window.validators
+
+	const startsWith7 = (value) => value.charAt(0) === '7';
+	new Vue({
+		el: "#app",
+		data: {
+			lastName: '',
+			firstName: '',
+			middleName: '',
+			dateOfBirth: '',
+			phone: '',
+			sex: '',
+			clientGroups: '',
+			doctor: '',
+			dontSendSMS: '',
+			addressPostalCode: '',
+			addressCountry: '',
+			addressRegion: '',
+			addressCity: '',
+			addressStreet: '',
+			addressBuilding: '',
+			passportType: '',
+			passportSeries: '',
+			passportNumber: '',
+			passportGivenBy: '',
+			passportDateGiven: '',
+		},
+		validations: {
+			lastName: {
+				required,
+			},
+			firstName: {
+				required,
+			},
+			middleName: {},
+			dateOfBirth: {
+				required,
+			},
+			phone: {
+				required,
+				startsWith7,
+                integer,
+				minLength: minLength(11),
+				maxLength: minLength(11)
+			},
+			sex: {
+			},
+			clientGroups: {
+				required,
+			},
+			doctor: {
+			},
+			dontSendSMS: {
+			},
+			addressPostalCode: {
+			},
+			addressCountry: {
+			},
+			addressRegion: {
+			},
+			addressCity: {
+				required,
+			},
+			addressStreet: {
+			},
+			addressBuilding: {
+			},
+			passportType: {
+			},
+			passportSeries: {
+			},
+			passportNumber: {
+			},
+			passportGivenBy: {
+			},
+			passportDateGiven: {
+				required,
+			}
+		},
+		methods: {
+			status(validation) {
+				return {
+					error: validation.$error,
+					dirty: validation.$dirty
+				}
+			}
+		}
+	})
+</script>
+</body>
+</html>
